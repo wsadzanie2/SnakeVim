@@ -4,7 +4,11 @@ from pygame.locals import *
 pygame.init()
 font = pygame.font.SysFont('', 128)
 width, height = 1000, 1000
+squares = 20
+rel_width = 50
+rel_height = 50
 screen = pygame.display.set_mode((width, height), RESIZABLE)
+score = 0
 
 
 def rel_to_poz(rel_poz):
@@ -15,7 +19,7 @@ def poz_to_rel(poz):
 
 class Apples:
     def __init__(self):
-        self.rel_poz = random.randint(0, width // 50), random.randint(0, height // 50)
+        self.rel_poz = random.randint(0, width // 50 - 1), random.randint(0, height // 50 - 1)
         self.poz = rel_to_poz(self.rel_poz)
 
     def draw(self):
@@ -25,7 +29,7 @@ class Apples:
         if not snake_head.collide_with_head(self):
             return
         while snake_head.collide_with_head(self):
-            self.rel_poz = random.randint(1, width // 50) - 1, random.randint(1, height // 50) - 1
+            self.rel_poz = random.randint(1, width // rel_width) - 1, random.randint(1, height // rel_height) - 1
             self.poz = rel_to_poz(self.rel_poz)
         snake_head.get_last_node().add_child()
 class SnakeNode:
@@ -47,9 +51,11 @@ class SnakeNode:
 
 
     def add_child(self, rel_poz=(-20, -20)):
+        global score
         if self.child:
             self.get_last_node().add_child(rel_poz=rel_poz)
         self.child = SnakeNode(self, None, rel_poz)
+        score += 1
 
     def get_last_node(self):
         if self.child:
@@ -143,6 +149,8 @@ while run:
                 snake_head.direction = 'left'
             elif event.key == K_k and snake_head.direction != 'down':
                 snake_head.direction = 'up'
+        if event.type == VIDEORESIZE:
+            rel_width, rel_height = screen.get_size() // squares
     pygame.display.flip()
 
 pygame.quit()
