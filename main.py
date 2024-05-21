@@ -78,8 +78,9 @@ class SnakeNode:
         else:
             self.rel_poz[0] += x
             self.rel_poz[1] += y
-        self.rel_poz[0] %= width // 50
-        self.rel_poz[1] %= height // 50
+        self.rel_poz[0] %= width // 50 + int(not width % 50 == 0)
+        self.rel_poz[1] %= height // 50 + int(not height % 50 == 0)
+
 
 
 apple = Apples()
@@ -150,7 +151,9 @@ while run:
             elif event.key == K_k and snake_head.direction != 'down':
                 snake_head.direction = 'up'
         if event.type == VIDEORESIZE:
-            rel_width, rel_height = screen.get_size() // squares
+            width, height = screen.get_size()
+            rel_width = width // 20
+            rel_height = height // 20
     pygame.display.flip()
 
 pygame.quit()
