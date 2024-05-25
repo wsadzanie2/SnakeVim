@@ -9,6 +9,7 @@ rel_width = 50
 rel_height = 50
 screen = pygame.display.set_mode((width, height), RESIZABLE)
 score = 0
+fullscreen = False
 
 
 def rel_to_poz(rel_poz):
@@ -150,6 +151,15 @@ while run:
                 snake_head.direction = 'left'
             elif event.key == K_k and snake_head.direction != 'down':
                 snake_head.direction = 'up'
+            elif event.key == K_F11:
+                fullscreen = not fullscreen
+                if fullscreen:
+                    screen = pygame.display.set_mode((0, 0), FULLSCREEN)
+                else:
+                    screen = pygame.display.set_mode((1000, 1000), RESIZABLE)
+                width, height = screen.get_size()
+                rel_width = width // 20
+                rel_height = height // 20
         if event.type == VIDEORESIZE:
             width, height = screen.get_size()
             rel_width = width // 20
