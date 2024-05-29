@@ -17,6 +17,44 @@ def rel_to_poz(rel_poz):
 def poz_to_rel(poz):
     return [poz[0] // 50, poz[1] // 50]
 
+class Button:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.color = (100, 100, 100)
+    def draw(self):
+        rect = pygame.Rect(self.x, self.y, 150, 50)
+        pygame.draw.rect(screen, self.color, rect)
+        draw_text('Start', rect.center, size=64)
+    def update(self, event):
+        if event.type == MOUSEBUTTONDOWN:
+            x, y = pygame.mouse.get_pos()
+            if pygame.Rect(self.x, self.y, 150, 50).collidepoint(x, y):
+                head = snake_head
+                while head.child:
+                    head = head.child
+                    head.parent.child = None
+                    head.parent = None
+                snake_head.rel_poz = [0, 0]
+                snake_head.direction = ''
+                for i in range(5):
+                    snake_head.get_last_node().add_child([0, i + 1])
+                return True
+
+start_game_button = Button(100, 100)
+
+def menu_loop():
+    while True:
+        screen.fill((75, 75, 75))
+        start_game_button.draw()
+        for event in pygame.event.get():
+            if start_game_button.update(event):
+                return
+            if event.type == QUIT:
+                pygame.quit()
+                quit()
+        pygame.display.flip()
+        
 
 class Apples:
     def __init__(self):
@@ -86,7 +124,8 @@ class SnakeNode:
 
 apple = Apples()
 
-def draw_text(text, poz, color=(0, 0, 0)):
+def draw_text(text, poz, color=(0, 0, 0), size=128):
+    font = pygame.font.SysFont('', size)
     font_thing = font.render(text, True, color)
     font_rect = font_thing.get_rect()
     font_rect.center = poz
@@ -112,11 +151,12 @@ run = True
 clock = pygame.time.Clock()
 frame = 0
 
+menu_loop()
 while run:
     frame += 1
     dt = clock.tick(60) / 1000
     if snake_head.child.collide_with_head(snake_head):
-        run = False
+        menu_loop()
     if frame % 7 == 0:
         move_snake(snake_head.direction)
     screen.fill((75, 75, 75))
