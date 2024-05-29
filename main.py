@@ -155,6 +155,7 @@ def move_snake(direction):
 run = True
 clock = pygame.time.Clock()
 frame = 0
+dir_buffer = ''
 
 menu_loop()
 while run:
@@ -163,6 +164,7 @@ while run:
     if snake_head.child.collide_with_head(snake_head):
         menu_loop()
     if frame % 7 == 0:
+        snake_head.direction = dir_buffer
         move_snake(snake_head.direction)
     screen.fill((75, 75, 75))
     if snake_head.direction == 'left':
@@ -189,13 +191,13 @@ while run:
             run = False
         if event.type == KEYDOWN:
             if event.key == K_l and snake_head.direction != 'left':
-                snake_head.direction = 'right'
+                dir_buffer = 'right'
             elif event.key == K_j and snake_head.direction != 'up':
-                snake_head.direction = 'down'
+                dir_buffer = 'down'
             elif event.key == K_h and snake_head.direction != 'right':
-                snake_head.direction = 'left'
+                dir_buffer = 'left'
             elif event.key == K_k and snake_head.direction != 'down':
-                snake_head.direction = 'up'
+                dir_buffer = 'up'
             elif event.key == K_F11:
                 fullscreen = not fullscreen
                 if fullscreen:
