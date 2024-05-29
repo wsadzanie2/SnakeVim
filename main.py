@@ -44,10 +44,15 @@ class Button:
 start_game_button = Button(100, 100)
 
 def menu_loop():
+    global width, height, rel_height, rel_width
     while True:
         screen.fill((75, 75, 75))
         start_game_button.draw()
         for event in pygame.event.get():
+            if event.type == VIDEORESIZE:
+                width, height = screen.get_size()
+                rel_width = width // 20
+                rel_height = height // 20
             if start_game_button.update(event):
                 return
             if event.type == QUIT:
