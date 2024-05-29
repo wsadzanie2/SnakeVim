@@ -27,6 +27,7 @@ class Button:
         pygame.draw.rect(screen, self.color, rect)
         draw_text('Start', rect.center, size=64)
     def update(self, event):
+        global dir_buffer
         if event.type == MOUSEBUTTONDOWN:
             x, y = pygame.mouse.get_pos()
             if pygame.Rect(self.x, self.y, 150, 50).collidepoint(x, y):
@@ -37,6 +38,7 @@ class Button:
                     head.parent = None
                 snake_head.rel_poz = [0, 0]
                 snake_head.direction = ''
+                dir_buffer = ''
                 for i in range(5):
                     snake_head.get_last_node().add_child([0, i + 1])
                 return True
