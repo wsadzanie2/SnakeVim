@@ -11,7 +11,6 @@ screen = pygame.display.set_mode((width, height), RESIZABLE)
 score = 0
 fullscreen = False
 
-
 def rel_to_poz(rel_poz):
     return [rel_poz[0] * 50, rel_poz[1] * 50]
 def poz_to_rel(poz):
@@ -194,7 +193,7 @@ while run:
         if event.type == KEYDOWN:
             if event.key == K_l and snake_head.direction != 'left':
                 dir_buffer = 'right'
-            elif event.key == K_j and snake_head.direction != 'up':
+            elif event.key == K_j and snake_head.direction != 'up' and snake_head.direction != '':
                 dir_buffer = 'down'
             elif event.key == K_h and snake_head.direction != 'right':
                 dir_buffer = 'left'
