@@ -1,5 +1,6 @@
-import pygame
 import random
+
+import pygame
 from pygame.locals import *
 pygame.init()
 font = pygame.font.SysFont('', 128)
@@ -37,7 +38,7 @@ class Button:
                     head.parent = None
                 snake_head.rel_poz = [0, 0]
                 snake_head.direction = ''
-                dir_buffer = ''
+                dir_buffer = []
                 for i in range(5):
                     snake_head.get_last_node().add_child([0, i + 1])
                 return True
@@ -156,7 +157,7 @@ def move_snake(direction):
 run = True
 clock = pygame.time.Clock()
 frame = 0
-dir_buffer = ''
+dir_buffer = []
 
 menu_loop()
 while run:
@@ -165,8 +166,11 @@ while run:
     if snake_head.child.collide_with_head(snake_head):
         menu_loop()
     if frame % 7 == 0:
-        snake_head.direction = dir_buffer
+        if len(dir_buffer) > 0:
+            snake_head.direction = dir_buffer[0]
         move_snake(snake_head.direction)
+        if len(dir_buffer) > 0:
+            dir_buffer = dir_buffer[:-2]
     screen.fill((75, 75, 75))
     if snake_head.direction == 'left':
         draw_text('h', (width // 2 - 50, height // 2), (255, 255, 255))
@@ -192,13 +196,13 @@ while run:
             run = False
         if event.type == KEYDOWN:
             if event.key == K_l and snake_head.direction != 'left':
-                dir_buffer = 'right'
+                dir_buffer.append('right')
             elif event.key == K_j and snake_head.direction != 'up' and snake_head.direction != '':
-                dir_buffer = 'down'
+                dir_buffer.append('down')
             elif event.key == K_h and snake_head.direction != 'right':
-                dir_buffer = 'left'
+                dir_buffer.append('left')
             elif event.key == K_k and snake_head.direction != 'down':
-                dir_buffer = 'up'
+                dir_buffer.append('up')
             elif event.key == K_F11:
                 fullscreen = not fullscreen
                 if fullscreen:
